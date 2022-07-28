@@ -1,5 +1,7 @@
 package com.hjlowe.harryspringproject.controller;
 
+import com.hjlowe.harryspringproject.dto.AuthenticationResponse;
+import com.hjlowe.harryspringproject.dto.LoginRequest;
 import com.hjlowe.harryspringproject.dto.RegisterRequest;
 import com.hjlowe.harryspringproject.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,12 @@ public class AuthController {
     public ResponseEntity<String> verifyAccount(@PathVariable String token){
         authService.verifyAccount(token);
         return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest){
+        return authService.login(loginRequest);
+
     }
 
 
