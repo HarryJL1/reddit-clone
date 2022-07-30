@@ -18,7 +18,6 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Builder
 public class Subreddit {
 
     @Id
