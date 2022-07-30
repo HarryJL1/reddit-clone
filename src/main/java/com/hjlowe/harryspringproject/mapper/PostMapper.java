@@ -15,10 +15,8 @@ import static com.hjlowe.harryspringproject.model.VoteType.DOWNVOTE;
 import static com.hjlowe.harryspringproject.model.VoteType.UPVOTE;
 
 @Mapper(componentModel = "spring")
-public abstract class PostMapper {
+public interface PostMapper {
 
-    @Autowired
-    private AuthService authService;
 
 
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
