@@ -2,6 +2,7 @@ package com.hjlowe.harryspringproject.service;
 
 import com.hjlowe.harryspringproject.dto.AuthenticationResponse;
 import com.hjlowe.harryspringproject.dto.LoginRequest;
+import com.hjlowe.harryspringproject.dto.RefreshTokenRequest;
 import com.hjlowe.harryspringproject.dto.RegisterRequest;
 import com.hjlowe.harryspringproject.exceptions.SpringRedditException;
 import com.hjlowe.harryspringproject.model.NotificationEmail;
@@ -39,6 +40,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -95,11 +97,27 @@ public class AuthService {
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
-        return new AuthenticationResponse(token, loginRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationTime()))
+                .username(loginRequest.getUsername())
+                .build();
     }
 
     public boolean isLoggedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+         String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+         return AuthenticationResponse.builder()
+                 .authenticationToken(token)
+                 .refreshToken(refreshTokenRequest.getRefreshToken())
+                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationTime()))
+                 .username(refreshTokenRequest.getUsername())
+                 .build();
     }
 }
