@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subreddit")
+@RequestMapping("/api/auth/subreddit")
 @AllArgsConstructor
 @Slf4j
 public class SubredditController {

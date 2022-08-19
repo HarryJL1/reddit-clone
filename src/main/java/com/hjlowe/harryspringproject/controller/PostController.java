@@ -14,7 +14,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
-@RequestMapping("/api/posts/")
+@RequestMapping("/api/auth/posts/")
 @AllArgsConstructor
 @Slf4j
 public class PostController {
@@ -28,16 +28,16 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long Id){
-        return status(HttpStatus.OK).body(postService.getPost(Id));
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id){
+        return status(HttpStatus.OK).body(postService.getPost(id));
     }
     @GetMapping("/")
     public ResponseEntity<List<PostResponse>> getAllPosts(){
         return status(HttpStatus.OK).body(postService.getAllPosts());
     }
     @GetMapping("/by-subreddit/{id}")
-    public ResponseEntity<List<PostResponse>> getAllPosts(@PathVariable Long Id){
-        return status(HttpStatus.OK).body(postService.getPostsBySubreddit(Id));
+    public ResponseEntity<List<PostResponse>> getAllPosts(@PathVariable Long id){
+        return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
     }
     @GetMapping("/by-user/{name}")
     public ResponseEntity<List<PostResponse>> getAllPosts(@PathVariable String name){
